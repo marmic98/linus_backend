@@ -7,8 +7,10 @@ router.post('/save', async (req, res) => {
     const { id, punteggio } = req.body;
     try {
         let punteggioUtente = await Punteggio.findOne({ where: { id } });
+        console.log(punteggioUtente.punteggio +" "+ punteggio )
         if (punteggioUtente) {
-            punteggioUtente.punteggio = punteggio;  // Aggiorna il punteggio se esiste
+            if(punteggioUtente.punteggio > punteggio)
+                punteggioUtente.punteggio = punteggio;  // Aggiorna il punteggio se esiste e se è migliore
         } else {
             punteggioUtente = await Punteggio.create({ id, punteggio });  // Crea un nuovo documento se non esiste
         }
