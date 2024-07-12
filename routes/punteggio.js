@@ -7,14 +7,14 @@ router.post('/save', async (req, res) => {
     const { id, punteggio } = req.body;
     try {
         let punteggioUtente = await Punteggio.findOne({ where: { id } });
-        console.log(punteggioUtente.punteggio +" "+ punteggio )
         if (punteggioUtente) {
-            if(punteggioUtente.punteggio > punteggio)
+            if(punteggioUtente.punteggio > punteggio){
                 punteggioUtente.punteggio = punteggio;  // Aggiorna il punteggio se esiste e se è migliore
+                await punteggioUtente.save();
+            }                
         } else {
             punteggioUtente = await Punteggio.create({ id, punteggio });  // Crea un nuovo documento se non esiste
         }
-        await punteggioUtente.save();
         res.status(200).json(punteggioUtente);
     } catch (error) {
         res.status(500).json({ message: error.message });
