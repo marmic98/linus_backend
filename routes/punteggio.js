@@ -38,7 +38,9 @@ router.get('/:id', async (req, res) => {
 // Endpoint per ottenere i punteggi di tutti gli utenti
 router.get('/', async (req, res) => {
     try {
-        const punteggi = await Punteggio.findAll();
+        const punteggi = (await Punteggio.findAll({
+            order: [['punteggio', 'ASC']]
+        }));
         res.status(200).json(punteggi);
     } catch (error) {
         res.status(500).json({ message: error.message });
